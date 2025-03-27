@@ -5,27 +5,41 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="91a7fa55-4168-4d45-8505-03e9bdef58c0" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/Libro-SoftwareDesign.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DAO/DAO.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DAO/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Interface/Book.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Interface/Mark.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Interface/Person.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Interface/Read.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Interface/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ManageDAO.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Objects/Book.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Objects/Mark.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Objects/Person.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Objects/Read.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Objects/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Validate/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Validate/schemas.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BackEnd/DAO/Book/dao.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BackEnd/DAO/Book/dao_interface.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BackEnd/DAO/Book/interface.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BackEnd/DAO/Book/object.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BackEnd/DAO/Mark/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BackEnd/DAO/Mark/dao.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BackEnd/DAO/Mark/dao_interface.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BackEnd/DAO/Mark/interface.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BackEnd/DAO/Mark/object.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BackEnd/DAO/Person/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BackEnd/DAO/Person/dao.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BackEnd/DAO/Person/dao_interface.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BackEnd/DAO/Person/interface.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BackEnd/DAO/Person/object.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BackEnd/DAO/Read/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BackEnd/DAO/Read/dao.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BackEnd/DAO/Read/dao_interface.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BackEnd/DAO/Read/interface.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BackEnd/DAO/Read/object.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BackEnd/DAO/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BackEnd/Management/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BackEnd/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Interface/Book.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Interface/Mark.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Interface/Person.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Interface/Read.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Interface/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/BackEnd/API/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ManageDAO.py" beforeDir="false" afterPath="$PROJECT_DIR$/BackEnd/DAO/ManageDAO.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Objects/Book.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Objects/Mark.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Objects/Person.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Objects/Read.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Objects/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/BackEnd/DAO/Book/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,6 +56,18 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;DarkMacician&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/DarkMacician/Libro-SoftwareDesign.git&quot;,
+    &quot;accountId&quot;: &quot;96ae6f1e-5438-41e4-9799-ffbff9b67615&quot;
+  }
+}</component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 0
 }</component>
@@ -51,15 +77,22 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Python.Book.executor&quot;: &quot;Run&quot;,
-    &quot;Python.test.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Python.Book.executor": "Run",
+    "Python.test.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "D:/Libro-SoftwareDesign"
   }
-}</component>
+}]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\Libro-SoftwareDesign\BackEnd\DAO" />
+      <recent name="D:\Libro-SoftwareDesign\BackEnd" />
+    </key>
+  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>

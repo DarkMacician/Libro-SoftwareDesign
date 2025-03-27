@@ -28,27 +28,6 @@ class DAO:
     def close(self):
         self.client.close()
 
-
-class PersonDAO(DAO):
-    def __init__(self):
-        super().__init__("Person")
-
-
-class BookDAO(DAO):
-    def __init__(self):
-        super().__init__("Book")
-
-    def update(self, book: Book):
-        new_book = book.to_json()
-        new_book["timestamp"] = datetime.utcnow().isoformat()
-        self.collection.insert_one(new_book)
-
-
-class ReadDAO(DAO):
-    def __init__(self):
-        super().__init__("Read")
-
-
 class MarkDAO(DAO):
     def __init__(self):
         super().__init__("Mark")
