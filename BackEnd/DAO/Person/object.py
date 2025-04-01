@@ -1,9 +1,10 @@
 from datetime import datetime
 from typing import Dict, Literal
-from Interface.Person import PersonInterface
-from Objects.Book import Book
-from Objects.Read import Read
-from Objects.Mark import Mark
+
+from BackEnd.DAO.Book.object import Book
+from BackEnd.DAO.Mark.object import Mark
+from BackEnd.DAO.Person.interface import PersonInterface
+from BackEnd.DAO.Read.object import Read
 
 
 class Person(PersonInterface):

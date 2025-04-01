@@ -1,6 +1,6 @@
 from typing import Dict
 
-from Interface.Mark import MarkInterface
+from BackEnd.DAO.Mark.interface import MarkInterface
 
 
 class Mark(MarkInterface):

@@ -1,8 +1,6 @@
 from datetime import datetime
 from typing import List, Dict
 from pymongo import MongoClient
-from Objects.Book import Book
-
 
 class DAO:
     def __init__(self, collection_name: str, db_url: str = "mongodb+srv://hoaiduy:introdatabase2024@cluster0.kvp0p.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0", db_name: str = "Library"):

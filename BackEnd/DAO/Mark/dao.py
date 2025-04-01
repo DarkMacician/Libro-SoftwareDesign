@@ -1,16 +1,15 @@
 from datetime import datetime
 from typing import List, Dict
 from pymongo import MongoClient
-from Objects.Book import Book
 
 
-class DAO:
-    def __init__(self, collection_name: str, db_url: str = "mongodb+srv://hoaiduy:introdatabase2024@cluster0.kvp0p.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0", db_name: str = "Library"):
+class MarkDAO:
+    def __init__(self, collection_name="Mark", db_url: str = "mongodb+srv://hoaiduy:introdatabase2024@cluster0.kvp0p.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0", db_name: str = "Library"):
         self.client = MongoClient(db_url)
         self.db = self.client[db_name]
         self.collection = self.db[collection_name]
 
-    def add(self, data: Dict):
+    def post(self, data: Dict):
         self.collection.insert_one(data)
 
     def get(self, query: Dict):
@@ -27,7 +26,3 @@ class DAO:
 
     def close(self):
         self.client.close()
-
-class MarkDAO(DAO):
-    def __init__(self):
-        super().__init__("Mark")

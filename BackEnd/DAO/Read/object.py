@@ -1,6 +1,6 @@
 from typing import Dict, List
 
-from Interface.Read import ReadInterface
+from BackEnd.DAO.Read.interface import ReadInterface
 
 
 class Read(ReadInterface):

@@ -1,7 +1,14 @@
+from datetime import datetime, timedelta
 from typing import List, Dict
-from DAO.DAO import PersonDAO, BookDAO, ReadDAO, MarkDAO
-from Objects.Book import Book
+import jwt
+from BackEnd.DAO.Book.dao import BookDAO
+from BackEnd.DAO.Book.object import Book
+from BackEnd.DAO.Mark.dao import MarkDAO
+from BackEnd.DAO.Person.dao import PersonDAO
+from BackEnd.DAO.Read.dao import ReadDAO
+import os
 
+KEY = "aaaaadafsdfe"
 
 class DAOManager:
     def __init__(self):
@@ -10,21 +17,30 @@ class DAOManager:
         self.read_dao = ReadDAO()
         self.mark_dao = MarkDAO()
 
-    def getUser(self, id: str) -> Dict:
-        return self.person_dao.get({"person_id": int(id)})
+    def validate_person(self, query):
+        return self.person_dao.check_by_username(query['username']) or self.person_dao.check_by_email(query['email'])
 
-    def createUser(self, data: Dict) -> None:
+    def add_person(self, data):
         self.person_dao.add(data)
 
-    def findBook(self, id: str) -> Dict:
+    def authenticate_user(self, data):
+        user = self.person_dao.get(data)
+        if user:
+            token = jwt.encode({"person_id": user["username"],
+                                "role": user['role'],
+                                "exp": datetime.utcnow() + timedelta(hours=1)},
+                               KEY, algorithm="HS256")
+            return {"token": token}
+        return None
+
+    def get_book(self, id: int) -> Dict:
         return self.book_dao.get({"book_id": int(id)})
 
-    def getrole(self, id: str) -> str:
-        user = self.getUser(id)
-        return user["role"] if user else None
+    def add_book(self, data: Dict) -> None:
+        self.book_dao.post(data)
 
-    def createBook(self, data: Dict) -> None:
-        self.book_dao.add(data)
+    def delete_book(self, book_id: int):
+        self.delete_book(book_id)
 
     def updateBook(self, data: Dict) -> None:
         self.book_dao.update(Book(**data))
@@ -43,6 +59,13 @@ class DAOManager:
 
     def getlogs(self, id: str) -> List[Dict]:
         return self.read_dao.get_all()
+
+    def search_book(self, query: dict):
+        return self.book_dao.search(query)
+
+    def create_bookmark(self, data):
+        self.mark_dao.post(data)
+
 
     def close(self):
         self.person_dao.close()

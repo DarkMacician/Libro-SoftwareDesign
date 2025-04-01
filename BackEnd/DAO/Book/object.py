@@ -1,7 +1,7 @@
 from typing import List, Dict
 from datetime import datetime
 
-from Interface.Book import BookInterface
+from BackEnd.DAO.Book.interface import BookInterface
 
 
 class Book(BookInterface):
