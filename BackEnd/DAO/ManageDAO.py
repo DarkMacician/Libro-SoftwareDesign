@@ -6,9 +6,8 @@ from BackEnd.DAO.Book.object import Book
 from BackEnd.DAO.Mark.dao import MarkDAO
 from BackEnd.DAO.Person.dao import PersonDAO
 from BackEnd.DAO.Read.dao import ReadDAO
-import os
+from BackEnd.utilities.config import SECRET_KEY
 
-KEY = "aaaaadafsdfe"
 
 class DAOManager:
     def __init__(self):
@@ -26,10 +25,10 @@ class DAOManager:
     def authenticate_user(self, data):
         user = self.person_dao.get(data)
         if user:
-            token = jwt.encode({"person_id": user["username"],
+            token = jwt.encode({"username": user["username"],
                                 "role": user['role'],
                                 "exp": datetime.utcnow() + timedelta(hours=1)},
-                               KEY, algorithm="HS256")
+                               SECRET_KEY, algorithm="HS256")
             return {"token": token}
         return None
 
@@ -40,13 +39,10 @@ class DAOManager:
         self.book_dao.post(data)
 
     def delete_book(self, book_id: int):
-        self.delete_book(book_id)
+        self.book_dao.delete(book_id)
 
     def updateBook(self, data: Dict) -> None:
         self.book_dao.update(Book(**data))
-
-    def removeBook(self, id: str) -> None:
-        self.book_dao.delete({"book_id": int(id)})
 
     def updateMark(self, data: Dict) -> None:
         self.mark_dao.update({"person_id": data["person_id"], "book_id": data["book_id"]}, data)
@@ -60,8 +56,11 @@ class DAOManager:
     def getlogs(self, id: str) -> List[Dict]:
         return self.read_dao.get_all()
 
-    def search_book(self, query: dict):
-        return self.book_dao.search(query)
+    def search_book(self, key):
+        return self.book_dao.search(key)
+
+    def find_book(self, id):
+        return self.book_dao.find(id)
 
     def create_bookmark(self, data):
         self.mark_dao.post(data)

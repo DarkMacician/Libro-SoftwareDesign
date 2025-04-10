@@ -2,9 +2,12 @@ from datetime import datetime
 from typing import List, Dict
 from pymongo import MongoClient
 
+from BackEnd.DAO.temp import completed_string
+from BackEnd.utilities.config import MongoDB
+
 
 class MarkDAO:
-    def __init__(self, collection_name="Mark", db_url: str = "mongodb+srv://hoaiduy:introdatabase2024@cluster0.kvp0p.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0", db_name: str = "Library"):
+    def __init__(self, collection_name="Mark", db_url=completed_string, db_name=MongoDB.DATABASE_NAME):
         self.client = MongoClient(db_url)
         self.db = self.client[db_name]
         self.collection = self.db[collection_name]

@@ -1,14 +1,27 @@
 from typing import List
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Query
 import jwt
 from pydantic import BaseModel
 from BackEnd.Management.LibraryManager import ManagementLayer
-
-KEY = "aaaaadafsdfe"
+from BackEnd.utilities.config import SECRET_KEY
 
 def get_role(token):
-    decoded_payload = jwt.decode(token, KEY, algorithms=["HS256"])
-    return decoded_payload.get("role")
+    try:
+        decoded_payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
+        return decoded_payload.get("role")
+    except jwt.ExpiredSignatureError:
+        raise HTTPException(status_code=401, detail="Token has expired")
+    except jwt.InvalidTokenError:
+        raise HTTPException(status_code=401, detail="Invalid token")
+
+def get_username(token):
+    try:
+        decoded_payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
+        return decoded_payload.get("username")
+    except jwt.ExpiredSignatureError:
+        raise HTTPException(status_code=401, detail="Token has expired")
+    except jwt.InvalidTokenError:
+        raise HTTPException(status_code=401, detail="Invalid token")
 
 class SignUp(BaseModel):
     username: str
@@ -35,9 +48,12 @@ class DeleteBook(BaseModel):
     book_id: int
 
 class BookMark(BaseModel):
-    username: str
+    token: str
     book_id: int
     page: int
+
+class SearchBook(BaseModel):
+    title: str
 
 # FastAPI App
 app = FastAPI()
@@ -68,11 +84,20 @@ def login(user: UserLogin):
         raise HTTPException(status_code=401, detail="Invalid username or password")
 
 @app.get("/read")
-def read(book_id: ReadBook):
+def read(book_id: int = Query(..., description="Book ID to view detail")):
     return library_manager.get_book_url(book_id)
 
 @app.post("/add_book")
 def add_book(book: AddBook):
+    book = {
+        'title': book.title,
+        'author': book.author,
+        'genre': book.genre,
+        'url': book.url,
+        'token': book.token
+    }
+    if library_manager.search_book(book['title']):
+        raise HTTPException(status_code=400, detail="Book already exists")
     if get_role(book['token']) == 'admin':
         book.pop('token', None)
         library_manager.add_book(book)
@@ -82,6 +107,14 @@ def add_book(book: AddBook):
 
 @app.delete("/delete_book")
 def delete_book(book: DeleteBook):
+    book = {
+        'book_id': book.book_id,
+        'token': book.token
+    }
+
+    if not library_manager.find_book(book['book_id']):
+        raise HTTPException(status_code=404, detail="Book not found")
+
     if get_role(book['token']) == 'admin':
         book.pop('token', None)
         library_manager.delete_book(book['book_id'])
@@ -89,22 +122,33 @@ def delete_book(book: DeleteBook):
     else:
         raise HTTPException(status_code=403, detail="Permission denied: Admin role required")
 
-@app.get("/view_detail/{book_id}")
-def view_detail(book_id: str):
+
+@app.get("/view_detail")
+def view_detail(book_id: int = Query(..., description="Book ID to view detail")):
     book = library_manager.view_detail(book_id)
     if not book:
         raise HTTPException(status_code=404, detail="Book not found")
+    book.pop('_id', None)
     return book
 
 @app.get("/search")
-def search(q: str):
-    books = library_manager.search_book(q)
-    if len(books) == 0:
-        return books
-    else:
+def search(title: str = Query(..., description="Book title to search")):
+    books = library_manager.search_book(title)
+    if not books:
         raise HTTPException(status_code=404, detail="No books found")
+    return books
 
 @app.post("/bookmark")
 def bookmark(mark: BookMark):
-    library_manager.create_bookmark(mark)
-    return {"message": "Book bookmarked successfully"}
+    mark = {
+        "token": mark.token,
+        "book_id": mark.book_id,
+        "page": mark.page
+    }
+    if get_role(mark['token']) == 'user':
+        mark['username'] = get_username(mark['token'])
+        mark.pop('token', None)
+        library_manager.create_bookmark(mark)
+        return {"message": "Book bookmarked successfully"}
+    else:
+        raise HTTPException(status_code=403, detail="Permission denied: User role required")

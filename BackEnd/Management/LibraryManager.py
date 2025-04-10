@@ -25,8 +25,11 @@ class ManagementLayer:
     def view_detail(self, book_id):
         return self.dao_manager.get_book(book_id)
 
-    def search_book(self, query):
-        return self.dao_manager.search_book(query)
+    def search_book(self, key):
+        return self.dao_manager.search_book(key)
 
     def create_bookmark(self, data):
         self.dao_manager.create_bookmark(data)
+
+    def find_book(self, id):
+        return self.dao_manager.find_book(id)
