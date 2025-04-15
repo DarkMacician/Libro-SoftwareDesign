@@ -2,7 +2,7 @@ from typing import List
 from fastapi import FastAPI, HTTPException, Query
 import jwt
 from pydantic import BaseModel
-from BackEnd.Management.LibraryManager import ManagementLayer
+from BackEnd.DAO.ManageDAO import DAOManager
 from BackEnd.utilities.config import SECRET_KEY
 
 def get_role(token):
@@ -57,7 +57,7 @@ class SearchBook(BaseModel):
 
 # FastAPI App
 app = FastAPI()
-library_manager = ManagementLayer()
+library_manager = DAOManager()
 
 @app.post("/signup")
 def sign_up(person: SignUp):
@@ -85,7 +85,7 @@ def login(user: UserLogin):
 
 @app.get("/read")
 def read(book_id: int = Query(..., description="Book ID to view detail")):
-    return library_manager.get_book_url(book_id)
+    return library_manager.get_book(book_id)['url']
 
 @app.post("/add_book")
 def add_book(book: AddBook):
@@ -125,7 +125,7 @@ def delete_book(book: DeleteBook):
 
 @app.get("/view_detail")
 def view_detail(book_id: int = Query(..., description="Book ID to view detail")):
-    book = library_manager.view_detail(book_id)
+    book = library_manager.get_book(book_id)
     if not book:
         raise HTTPException(status_code=404, detail="Book not found")
     book.pop('_id', None)
