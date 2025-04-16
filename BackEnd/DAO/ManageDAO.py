@@ -8,9 +8,20 @@ from BackEnd.DAO.Person.dao import PersonDAO
 from BackEnd.DAO.Read.dao import ReadDAO
 from BackEnd.utilities.config import SECRET_KEY
 
-
 class DAOManager:
+    _instance = None
+
+    def __new__(cls, *args, **kwargs):
+        if cls._instance is None:
+            cls._instance = super(DAOManager, cls).__new__(cls)
+            cls._instance.__initialized = False
+        return cls._instance
+
     def __init__(self):
+        if self.__initialized:
+            return
+        self.__initialized = True
+
         self.person_dao = PersonDAO()
         self.book_dao = BookDAO()
         self.read_dao = ReadDAO()
@@ -64,7 +75,6 @@ class DAOManager:
 
     def create_bookmark(self, data):
         self.mark_dao.post(data)
-
 
     def close(self):
         self.person_dao.close()
