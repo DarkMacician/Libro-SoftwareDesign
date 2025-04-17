@@ -8,8 +8,8 @@ from BackEnd.utilities.config import MongoDB
 
 class PersonDAO:
     def __init__(self, collection_name="Person"):
-        self.db = MongoConnection().get_db()
-        self.collection = self.db[collection_name]
+        db = MongoConnection().get_db()
+        self.collection = db[collection_name]
 
     def add(self, data: Dict):
         self.collection.insert_one(data)

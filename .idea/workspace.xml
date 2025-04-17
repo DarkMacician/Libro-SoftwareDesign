@@ -4,7 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="91a7fa55-4168-4d45-8505-03e9bdef58c0" name="Changes" comment="" />
+    <list default="true" id="91a7fa55-4168-4d45-8505-03e9bdef58c0" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/BackEnd/DAO/Book/dao.py" beforeDir="false" afterPath="$PROJECT_DIR$/BackEnd/DAO/Book/dao.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BackEnd/DAO/Mark/dao.py" beforeDir="false" afterPath="$PROJECT_DIR$/BackEnd/DAO/Mark/dao.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BackEnd/DAO/Person/dao.py" beforeDir="false" afterPath="$PROJECT_DIR$/BackEnd/DAO/Person/dao.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BackEnd/DAO/Read/dao.py" beforeDir="false" afterPath="$PROJECT_DIR$/BackEnd/DAO/Read/dao.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BackEnd/DAO/connection.py" beforeDir="false" afterPath="$PROJECT_DIR$/BackEnd/DAO/connection.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />

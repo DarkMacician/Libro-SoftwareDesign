@@ -1,10 +1,10 @@
 from typing import List, Dict
 from BackEnd.DAO.connection import MongoConnection
 
-class DAO:
+class ReadDAO:
     def __init__(self, collection_name="Read"):
-        self.db = MongoConnection().get_db()
-        self.collection = self.db[collection_name]
+        db = MongoConnection().get_db()
+        self.collection = db[collection_name]
 
     def add(self, data: Dict):
         self.collection.insert_one(data)
@@ -20,7 +20,3 @@ class DAO:
 
     def delete(self, query: Dict):
         self.collection.delete_one(query)
-
-class ReadDAO(DAO):
-    def __init__(self):
-        super().__init__("Read")

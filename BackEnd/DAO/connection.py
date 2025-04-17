@@ -12,7 +12,7 @@ class MongoConnection:
             cls._instance.db = cls._instance.client[MongoDB.DATABASE_NAME]
         return cls._instance
 
-    def get_db(self):
+    def get_db_instance(self):
         return self.db
 
     def close(self):

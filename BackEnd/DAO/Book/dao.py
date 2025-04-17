@@ -4,8 +4,8 @@ from BackEnd.DAO.connection import MongoConnection
 
 class BookDAO:
     def __init__(self, collection_name="Book"):
-        self.db = MongoConnection().get_db()
-        self.collection = self.db[collection_name]
+        db = MongoConnection.get_db()
+        self.collection = db[collection_name]
 
     def post(self, data: Dict):
         last_book = self.collection.find_one({}, sort=[("book_id", DESCENDING)])
