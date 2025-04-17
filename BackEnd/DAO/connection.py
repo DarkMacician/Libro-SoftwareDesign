@@ -13,7 +13,7 @@ class MongoConnection:
         return cls._instance
 
     def get_db_instance(self):
-        return self.db
+        return self._instance.db
 
     def close(self):
         if self._instance:
