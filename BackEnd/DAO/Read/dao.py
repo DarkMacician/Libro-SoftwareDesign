@@ -3,7 +3,7 @@ from BackEnd.DAO.connection import MongoConnection
 
 class ReadDAO:
     def __init__(self, collection_name="Read"):
-        db = MongoConnection().get_db()
+        db = MongoConnection().get_db_instance()
         self.collection = db[collection_name]
 
     def add(self, data: Dict):

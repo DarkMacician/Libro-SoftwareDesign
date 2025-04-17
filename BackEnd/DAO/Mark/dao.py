@@ -4,7 +4,7 @@ from BackEnd.DAO.connection import MongoConnection
 
 class MarkDAO:
     def __init__(self, collection_name="Mark"):
-        db = MongoConnection().get_db()
+        db = MongoConnection().get_db_instance()
         self.collection = db[collection_name]
 
     def post(self, data: Dict):

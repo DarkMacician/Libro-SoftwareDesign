@@ -1,14 +1,9 @@
 from typing import List, Dict
-from pymongo import MongoClient
-
 from BackEnd.DAO.connection import MongoConnection
-from BackEnd.DAO.temp import completed_string
-from BackEnd.utilities.config import MongoDB
-
 
 class PersonDAO:
     def __init__(self, collection_name="Person"):
-        db = MongoConnection().get_db()
+        db = MongoConnection().get_db_instance()
         self.collection = db[collection_name]
 
     def add(self, data: Dict):

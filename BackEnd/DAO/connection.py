@@ -4,18 +4,26 @@ from BackEnd.DAO.temp import completed_string
 
 class MongoConnection:
     _instance = None
+    _client = None
+    _db = None
 
-    def __new__(cls):
-        if cls._instance is None:
-            cls._instance = super(MongoConnection, cls).__new__(cls)
-            cls._instance.client = MongoClient(completed_string)
-            cls._instance.db = cls._instance.client[MongoDB.DATABASE_NAME]
-        return cls._instance
+    def __init__(self):
+        # Only initialize if instance hasn't been created
+        if MongoConnection._instance is None:
+            MongoConnection._client = MongoClient(completed_string)
+            MongoConnection._db = MongoConnection._client[MongoDB.DATABASE_NAME]
+            MongoConnection._instance = self
 
-    def get_db_instance(self):
-        return self._instance.db
+    @staticmethod
+    def get_db_instance():
+        if MongoConnection._db is None:
+            MongoConnection()
+        return MongoConnection._db
 
-    def close(self):
-        if self._instance:
-            self.client.close()
+    @staticmethod
+    def close():
+        if MongoConnection._client:
+            MongoConnection._client.close()
+            MongoConnection._client = None
+            MongoConnection._db = None
             MongoConnection._instance = None
