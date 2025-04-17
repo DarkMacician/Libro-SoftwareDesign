@@ -1,14 +1,9 @@
-from datetime import datetime
 from typing import List, Dict
-from pymongo import MongoClient
-
-from BackEnd.DAO.temp import completed_string
-from BackEnd.utilities.config import MongoDB
+from BackEnd.DAO.connection import MongoConnection
 
 class DAO:
-    def __init__(self, collection_name: str, db_url=completed_string, db_name=MongoDB.DATABASE_NAME):
-        self.client = MongoClient(db_url)
-        self.db = self.client[db_name]
+    def __init__(self, collection_name="Read"):
+        self.db = MongoConnection().get_db()
         self.collection = self.db[collection_name]
 
     def add(self, data: Dict):
@@ -25,10 +20,6 @@ class DAO:
 
     def delete(self, query: Dict):
         self.collection.delete_one(query)
-
-    def close(self):
-        self.client.close()
-
 
 class ReadDAO(DAO):
     def __init__(self):

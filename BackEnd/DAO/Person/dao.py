@@ -1,14 +1,14 @@
 from typing import List, Dict
 from pymongo import MongoClient
 
+from BackEnd.DAO.connection import MongoConnection
 from BackEnd.DAO.temp import completed_string
 from BackEnd.utilities.config import MongoDB
 
 
 class PersonDAO:
-    def __init__(self, collection_name="Person", db_url=completed_string, db_name=MongoDB.DATABASE_NAME):
-        self.client = MongoClient(db_url)
-        self.db = self.client[db_name]
+    def __init__(self, collection_name="Person"):
+        self.db = MongoConnection().get_db()
         self.collection = self.db[collection_name]
 
     def add(self, data: Dict):
@@ -31,6 +31,3 @@ class PersonDAO:
 
     def delete(self, query: Dict):
         self.collection.delete_one(query)
-
-    def close(self):
-        self.client.close()

@@ -6,6 +6,7 @@ from BackEnd.DAO.Book.object import Book
 from BackEnd.DAO.Mark.dao import MarkDAO
 from BackEnd.DAO.Person.dao import PersonDAO
 from BackEnd.DAO.Read.dao import ReadDAO
+from BackEnd.DAO.connection import MongoConnection
 from BackEnd.utilities.config import SECRET_KEY
 
 class DAOManager:
@@ -77,7 +78,4 @@ class DAOManager:
         self.mark_dao.post(data)
 
     def close(self):
-        self.person_dao.close()
-        self.book_dao.close()
-        self.read_dao.close()
-        self.mark_dao.close()
+        MongoConnection().close()

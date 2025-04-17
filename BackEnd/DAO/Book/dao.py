@@ -1,13 +1,10 @@
 from typing import List, Dict
-from pymongo import MongoClient, DESCENDING
-
-from BackEnd.DAO.temp import completed_string
-from BackEnd.utilities.config import MongoDB
+from pymongo import DESCENDING
+from BackEnd.DAO.connection import MongoConnection
 
 class BookDAO:
-    def __init__(self, collection_name="Book", db_url=completed_string, db_name=MongoDB.DATABASE_NAME):
-        self.client = MongoClient(db_url)
-        self.db = self.client[db_name]
+    def __init__(self, collection_name="Book"):
+        self.db = MongoConnection().get_db()
         self.collection = self.db[collection_name]
 
     def post(self, data: Dict):
