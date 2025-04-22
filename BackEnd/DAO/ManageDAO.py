@@ -78,7 +78,7 @@ class DAOManager:
         self.mark_dao.post(data)
 
     def get_all_books(self):
-        self.book_dao.get_all()
+        return self.book_dao.get_all()
 
     def close(self):
         MongoConnection().close()

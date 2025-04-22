@@ -16,7 +16,7 @@ class BookDAO:
     def get(self, query: Dict):
         return self.collection.find_one(query)
 
-    def get_all(self) -> List[Dict]:
+    def get_all(self):
         return list(self.collection.find())
 
     def update(self, query: Dict, data: Dict):
