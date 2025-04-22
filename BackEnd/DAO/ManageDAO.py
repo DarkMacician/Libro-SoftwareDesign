@@ -77,5 +77,8 @@ class DAOManager:
     def create_bookmark(self, data):
         self.mark_dao.post(data)
 
+    def get_all_books(self):
+        self.book_dao.get_all()
+
     def close(self):
         MongoConnection().close()

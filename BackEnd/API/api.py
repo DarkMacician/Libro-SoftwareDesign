@@ -2,6 +2,8 @@ from typing import List
 from fastapi import FastAPI, HTTPException, Query
 import jwt
 from pydantic import BaseModel
+from fastapi.middleware.cors import CORSMiddleware
+
 from BackEnd.DAO.ManageDAO import DAOManager
 from BackEnd.utilities.config import SECRET_KEY
 
@@ -58,6 +60,14 @@ class SearchBook(BaseModel):
 # FastAPI App
 app = FastAPI()
 library_manager = DAOManager()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Hoặc chỉ định cụ thể như ["http://localhost:3000"]
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.post("/signup")
 def sign_up(person: SignUp):
@@ -152,3 +162,10 @@ def bookmark(mark: BookMark):
         return {"message": "Book bookmarked successfully"}
     else:
         raise HTTPException(status_code=403, detail="Permission denied: User role required")
+
+@app.get("/get_all_book")
+def get_all_book():
+    books = library_manager.get_all_books()
+    for book in books:
+        book.pop('_id', None)
+    return books
