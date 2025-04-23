@@ -97,7 +97,7 @@ def login(user: UserLogin):
 def read(book_id: int = Query(..., description="Book ID to view detail")):
     return library_manager.get_book(book_id)['url']
 
-@app.post("/add_book")
+@app.post("/admin/add_book")
 def add_book(book: AddBook):
     book = {
         'title': book.title,
@@ -115,7 +115,7 @@ def add_book(book: AddBook):
     else:
         raise HTTPException(status_code=403, detail="Permission denied: Admin role required")
 
-@app.delete("/delete_book")
+@app.delete("/admin/delete_book")
 def delete_book(book: DeleteBook):
     book = {
         'book_id': book.book_id,
