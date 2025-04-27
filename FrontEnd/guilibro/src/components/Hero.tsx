@@ -14,9 +14,9 @@ const Hero = () => {
           <p className="text-lg text-gray-200 mb-6">
             Explore thousands of books from contemporary bestsellers to timeless classics.
           </p>
-          <button className="bg-[#F0B90B] text-black font-semibold py-3 px-6 rounded-lg hover:bg-[#F0B90B]/80 transition-colors">
+          {/* <button className="bg-[#F0B90B] text-black font-semibold py-3 px-6 rounded-lg hover:bg-[#F0B90B]/80 transition-colors">
             Start Reading
-          </button>
+          </button> */}
         </div>
       </div>
     </div>
