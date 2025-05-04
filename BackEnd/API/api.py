@@ -158,7 +158,10 @@ def bookmark(mark: BookMark):
     if get_role(mark['token']) == 'user':
         mark['username'] = get_username(mark['token'])
         mark.pop('token', None)
-        library_manager.create_bookmark(mark)
+        if library_manager.getMark({'username': mark['username'], 'book_id': mark['username']}):
+            library_manager.updateMark(mark)
+        else:
+            library_manager.create_bookmark(mark)
         return {"message": "Book bookmarked successfully"}
     else:
         raise HTTPException(status_code=403, detail="Permission denied: User role required")

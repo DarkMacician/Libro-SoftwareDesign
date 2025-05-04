@@ -57,7 +57,7 @@ class DAOManager:
         self.book_dao.update(Book(**data))
 
     def updateMark(self, data: Dict) -> None:
-        self.mark_dao.update({"person_id": data["person_id"], "book_id": data["book_id"]}, data)
+        self.mark_dao.update({"username": data["username"], "book_id": data["book_id"]}, data)
 
     def getMark(self, query: Dict) -> Dict:
         return self.mark_dao.get(query)
