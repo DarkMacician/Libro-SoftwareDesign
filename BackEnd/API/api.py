@@ -189,8 +189,10 @@ def get_bookmark(info: ExtractBookmark):
     info['username'] = get_username(info['token'])
     info.pop('token', None)
     result = library_manager.getMark(info)
+    if not result:
+        raise HTTPException(status_code=404, detail="No Bookmarks found")
 
     return {
             "status": "success",
-            "data": result
+            "page": result['page']
         }
