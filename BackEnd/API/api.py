@@ -57,6 +57,10 @@ class BookMark(BaseModel):
 class SearchBook(BaseModel):
     title: str
 
+class ExtractBookmark(BaseModel):
+    token: str
+    book_id: int
+
 # FastAPI App
 app = FastAPI()
 library_manager = DAOManager()
@@ -172,3 +176,21 @@ def get_all_book():
     for book in books:
         book.pop('_id', None)
     return books
+
+@app.get("/bookmark")
+def get_bookmark(info: ExtractBookmark):
+    info = {
+        "token": info.token,
+        "book_id": info.book_id
+    }
+    if get_role(info['token']) != 'user':
+        raise HTTPException(status_code=403, detail="Permission denied: User role required")
+
+    info['username'] = get_username(info['token'])
+    info.pop('token', None)
+    result = library_manager.getMark(info)
+
+    return {
+            "status": "success",
+            "data": result
+        }
