@@ -162,7 +162,7 @@ def bookmark(mark: BookMark):
     if get_role(mark['token']) == 'user':
         mark['username'] = get_username(mark['token'])
         mark.pop('token', None)
-        if library_manager.getMark({'username': mark['username'], 'book_id': mark['username']}):
+        if library_manager.getMark({'username': mark['username'], 'book_id': mark['book_id']}):
             library_manager.updateMark(mark)
         else:
             library_manager.create_bookmark(mark)
