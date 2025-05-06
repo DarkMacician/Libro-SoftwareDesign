@@ -180,7 +180,7 @@ def get_all_book():
 @app.get("/bookmark")
 def get_bookmark(
     token: str = Query(..., description="User token"),
-    book_id: str = Query(..., description="Book ID")
+    book_id: int = Query(..., description="Book ID")
 ):
     if get_role(token) != 'user':
         raise HTTPException(status_code=403, detail="Permission denied: User role required")
