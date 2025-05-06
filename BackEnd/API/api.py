@@ -178,21 +178,24 @@ def get_all_book():
     return books
 
 @app.get("/bookmark")
-def get_bookmark(info: ExtractBookmark):
-    info = {
-        "token": info.token,
-        "book_id": info.book_id
-    }
-    if get_role(info['token']) != 'user':
+def get_bookmark(
+    token: str = Query(..., description="User token"),
+    book_id: str = Query(..., description="Book ID")
+):
+    if get_role(token) != 'user':
         raise HTTPException(status_code=403, detail="Permission denied: User role required")
 
-    info['username'] = get_username(info['token'])
-    info.pop('token', None)
+    username = get_username(token)
+    info = {
+        "book_id": book_id,
+        "username": username
+    }
+
     result = library_manager.getMark(info)
     if not result:
         raise HTTPException(status_code=404, detail="No Bookmarks found")
 
     return {
-            "status": "success",
-            "page": result['page']
-        }
+        "status": "success",
+        "page": result['page']
+    }
