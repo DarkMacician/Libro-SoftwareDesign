@@ -26,8 +26,8 @@ class BookDAO:
         self.collection.delete_one({'book_id': book_id})
 
     def search(self, key):
-        books = self.collection.find({"title": {"$regex": key, "$options": "i"}})
-        return [{"_id": str(book["_id"]), "title": book["title"]} for book in books]
+        books = self.collection.find({"title": {"$regex": key, "$options": "i"}}, {"_id": 0})
+        return [book for book in books]
 
     def find(self, id):
         book = self.collection.find_one({"book_id": id})
