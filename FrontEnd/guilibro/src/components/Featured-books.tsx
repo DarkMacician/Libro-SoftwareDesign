@@ -3,7 +3,7 @@
 import { useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { ChevronLeft, ChevronRight, Star } from "lucide-react"
+import { ChevronLeft, ChevronRight, Star, BookOpen, Clock } from "lucide-react"
 
 const books = [
   {
@@ -15,6 +15,7 @@ const books = [
     originalPrice: 95000,
     rating: 4.5,
     slug: "duong-phuong-nam",
+    readTime: "6h 30m",
   },
   {
     id: 2,
@@ -25,6 +26,7 @@ const books = [
     originalPrice: 110000,
     rating: 4.8,
     slug: "dua-vao-triet-hoc",
+    readTime: "7h 15m",
   },
   {
     id: 3,
@@ -35,6 +37,7 @@ const books = [
     originalPrice: 120000,
     rating: 4.7,
     slug: "gop-phan-tim-hieu-lich-su-viet",
+    readTime: "5h 45m",
   },
   {
     id: 4,
@@ -45,6 +48,7 @@ const books = [
     originalPrice: 85000,
     rating: 4.6,
     slug: "tu-duy-phan-bien",
+    readTime: "4h 20m",
   },
   {
     id: 5,
@@ -55,6 +59,7 @@ const books = [
     originalPrice: 90000,
     rating: 4.4,
     slug: "nghe-thuat-song-dep",
+    readTime: "3h 10m",
   },
   {
     id: 6,
@@ -65,6 +70,7 @@ const books = [
     originalPrice: 130000,
     rating: 4.9,
     slug: "kinh-te-hoc-dai-cuong",
+    readTime: "8h 5m",
   },
   {
     id: 7,
@@ -75,6 +81,7 @@ const books = [
     originalPrice: 110000,
     rating: 4.7,
     slug: "lich-su-viet-nam",
+    readTime: "5h 30m",
   },
   {
     id: 8,
@@ -85,6 +92,7 @@ const books = [
     originalPrice: 95000,
     rating: 4.5,
     slug: "van-hoc-viet-nam-hien-dai",
+    readTime: "6h 15m",
   },
 ]
 
@@ -105,42 +113,64 @@ export default function FeaturedBooks() {
 
   return (
     <div className="relative">
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 py-8">
         {visibleBooks.map((book) => (
           <Link key={book.id} href={`/sach/${book.slug}`} className="group">
-            <div className="book-card">
-              <div className="relative h-64 overflow-hidden">
+            <div className="relative overflow-hidden rounded-xl transition-all duration-500 glass-effect hover:shadow-xl hover:shadow-[#6d28d9]/20 border border-[#1e293b] hover:border-[#6d28d9] transform hover:-translate-y-2">
+              
+              {/* Hover Gradient Overlay */}
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0a0f1e] via-transparent to-transparent 
+                opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+
+              {/* Book Cover */}
+              <div className="relative aspect-[2/3] overflow-hidden">
                 <Image
                   src={book.cover || "/placeholder.svg"}
                   alt={book.title}
                   fill
-                  className="object-cover transition-transform group-hover:scale-105"
+                  className="object-cover transition-transform duration-500 group-hover:scale-110"
                 />
               </div>
-              <div className="p-4">
-                <h3 className="book-title">{book.title}</h3>
-                <p className="text-gray-600 text-sm mb-2">{book.author}</p>
-                <div className="flex items-center mb-2">
-                  {[...Array(5)].map((_, i) => (
-                    <Star
-                      key={i}
-                      size={16}
-                      className={`${
-                        i < Math.floor(book.rating)
-                          ? "fill-yellow-400 text-yellow-400"
-                          : i < book.rating
-                            ? "fill-yellow-400 text-yellow-400"
-                            : "text-gray-300"
-                      }`}
-                    />
-                  ))}
-                  <span className="text-sm text-gray-600 ml-1">({book.rating})</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="book-price">{book.price.toLocaleString()}đ</span>
-                  <span className="book-original-price">{book.originalPrice.toLocaleString()}đ</span>
+
+              {/* Content Overlay */}
+              <div className="absolute inset-0 flex flex-col justify-end p-6 transform translate-y-full 
+                group-hover:translate-y-0 transition-transform duration-500">
+                
+                {/* Book Info */}
+                <div className="space-y-3 text-white">
+                  <h3 className="text-lg font-semibold line-clamp-2 gradient-text">{book.title}</h3>
+                  <p className="text-sm text-[#94a3b8]">{book.author}</p>
+                  
+                  {/* Stats */}
+                  <div className="flex items-center justify-between text-sm">
+                    <div className="flex items-center space-x-1">
+                      <Star className="w-4 h-4 text-[#f472b6]" />
+                      <span>{book.rating}</span>
+                    </div>
+                    <div className="flex items-center space-x-1">
+                      <Clock className="w-4 h-4 text-[#6d28d9]" />
+                      <span>{book.readTime}</span>
+                    </div>
+                  </div>
+
+                  {/* Read Button */}
+                  <button className="w-full py-2 px-4 rounded-lg bg-gradient-to-r from-[#6d28d9] to-[#f472b6]
+                    text-white font-semibold transform transition-all duration-300
+                    hover:shadow-lg hover:shadow-[#6d28d9]/50 hover:scale-105
+                    flex items-center justify-center gap-2">
+                    <BookOpen className="w-4 h-4" />
+                    <span>Đọc Ngay</span>
+                  </button>
                 </div>
               </div>
+            </div>
+
+            {/* Floating Tag */}
+            <div className="absolute top-4 right-4 px-2 py-1 rounded-full text-xs font-semibold
+              bg-gradient-to-r from-[#6d28d9] to-[#f472b6] text-white
+              opacity-0 group-hover:opacity-100 transition-all duration-500
+              transform group-hover:translate-y-0 translate-y-2">
+              Nổi Bật
             </div>
           </Link>
         ))}

@@ -2,15 +2,16 @@
 import RecommendedBooks from "@/components/recommended-books"
 import ProtectedRoute from "@/components/protected-route"
 import Hero from "@/components/Hero"
-import BookCategories from "@/components/BookCategories"
+import Header from "@/components/Header"
+
 
 export default function Home() {
   return (
     <ProtectedRoute requireUser>
-      <div>
+      <Header />
+      <div className="container min-h-screen mx-auto bg-gradient-to-b from-libro-dark-950 to-libro-dark-900 text-white px-4 ">
         <Hero />
-        <div className="px-6 py-8">
-          <BookCategories />
+        <div className="py-8 ">          
           <RecommendedBooks />
         </div>
       </div>

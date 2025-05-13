@@ -3,8 +3,8 @@ import { Home, BookOpen, Star, Clock, Heart, Settings } from 'lucide-react';
 
 const Sidebar = () => {
   return (
-    <aside className="w-64 bg-[#181A20] min-h-screen p-4 border-r border-[#2B2F36]">
-      <nav>
+    <aside className="w-64 glass-effect min-h-screen p-4 fixed left-0 top-0 z-40">
+      <nav className="h-full pt-20">
         <ul className="space-y-2">
           {[
             { icon: Home, label: 'Home' },
@@ -17,10 +17,30 @@ const Sidebar = () => {
             <li key={index}>
               <a
                 href="#"
-                className="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-[#2B2F36] text-gray-400 hover:text-[#F0B90B]"
+                className="relative group flex items-center space-x-3 px-4 py-3 rounded-lg 
+                  transition-all duration-300"
               >
-                <item.icon className="h-5 w-5" />
-                <span>{item.label}</span>
+                {/* Hover background with gradient and blur */}
+                <div className="absolute inset-0 bg-gradient-to-r from-[#6d28d9]/20 to-[#f472b6]/20 
+                  opacity-0 group-hover:opacity-100 rounded-lg transition-opacity duration-300"></div>
+                
+                {/* Left border indicator with glow */}
+                <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-[#6d28d9] to-[#f472b6]
+                  opacity-0 group-hover:opacity-100 rounded-r-lg transition-all duration-300
+                  shadow-[0_0_10px_rgba(109,40,217,0.5)]"></div>
+
+                {/* Icon with floating animation */}
+                <div className="relative">
+                  <item.icon className="h-5 w-5 text-[#94a3b8] group-hover:text-[#6d28d9]
+                    transition-all duration-300 group-hover:scale-110 transform" />
+                </div>
+
+                {/* Label with gradient text effect */}
+                <span className="relative font-medium text-[#94a3b8] group-hover:text-transparent 
+                  group-hover:bg-gradient-to-r group-hover:from-[#6d28d9] group-hover:to-[#f472b6]
+                  group-hover:bg-clip-text transition-all duration-300">
+                  {item.label}
+                </span>
               </a>
             </li>
           ))}

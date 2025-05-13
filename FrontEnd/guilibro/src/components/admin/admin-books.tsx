@@ -49,15 +49,15 @@ export default function AdminBooks() {
     return (
       <section>
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-bold text-yellow-500">Quản Lý Sách</h2>
+          <h2 className="text-2xl font-bold text-white">Quản Lý Sách</h2>
           <div className="flex gap-2">
-            <button className="flex items-center gap-2 bg-[#252525] text-white px-4 py-2 rounded-md">
+            <button className="flex items-center gap-2 bg-[#1c2438]/50 text-white px-4 py-2 rounded-lg border border-[#334155]">
               <RefreshCw className="h-5 w-5 animate-spin" />
               Đang tải...
             </button>
           </div>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 min-h-[250px]:">
           {[...Array(8)].map((_, i) => (
             <div key={i} className="bg-[#1a1a1a] rounded-lg overflow-hidden animate-pulse">
               <div className="h-64 bg-gray-800"></div>
@@ -77,34 +77,34 @@ export default function AdminBooks() {
     return (
       <section>
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-bold text-yellow-500">Quản Lý Sách</h2>
+          <h2 className="text-2xl font-bold text-white">Quản Lý Sách</h2>
           <button
             onClick={fetchBooks}
-            className="flex items-center gap-2 bg-[#252525] hover:bg-[#333] text-white px-4 py-2 rounded-md transition-colors">
+            className="flex items-center gap-2 bg-[#1c2438]/50 hover:bg-[#1c2438] text-white px-4 py-2 text-center font-medium rounded-lg transition-all duration-300 border border-[#334155] hover:border-[#6d28d9]">
             <RefreshCw className="h-5 w-5" />
             Tải lại
           </button>
         </div>
-        <div className="bg-red-900/30 border border-red-800 text-red-300 p-4 rounded-md">{error}</div>
+        <div className="bg-[#1c2438]/30 border border-red-800 text-red-300 p-4 rounded-lg">{error}</div>
       </section>
     )
   }
 
   return (
-    <section>
+    <section>      
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold text-yellow-500">Quản Lý Sách</h2>
+        <h2 className="text-2xl font-bold text-white">Quản Lý Sách</h2>
         <div className="flex gap-2">
           <Link
-            href="/admin/books/add"
-            className="flex items-center gap-2 bg-yellow-500 hover:bg-yellow-600 text-black px-4 py-2 rounded-md transition-colors"
+            href="/admin/books/add_book"
+            className="flex items-center gap-2 bg-gradient-to-r from-[#6d28d9] to-[#f472b6] text-white px-4 py-2 rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-[#6d28d9]/20 hover:scale-[1.02]"
           >
             <PlusCircle className="h-5 w-5" />
             Thêm Sách Mới
           </Link>
           <button
             onClick={fetchBooks}
-            className="flex items-center gap-2 bg-[#252525] hover:bg-[#333] text-white px-4 py-2 rounded-md transition-colors"
+            className="flex items-center gap-2 bg-[#1c2438]/50 hover:bg-[#1c2438] text-white px-4 py-2 text-center font-medium rounded-lg transition-all duration-300 border border-[#334155] hover:border-[#6d28d9]"
           >
             <RefreshCw className="h-5 w-5" />
             Tải lại
@@ -112,29 +112,29 @@ export default function AdminBooks() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 min-h-[250px]">
         {books.map((book) => (
-          <div key={book.book_id} className="bg-[#1a1a1a] rounded-lg overflow-hidden">
+          <div key={book.book_id} className="bg-[#1c2438] rounded-lg overflow-hidden border border-[#334155]">
             <div className="h-64 relative">
               <Image src="/placeholder.svg?height=400&width=300" alt={book.title} fill className="object-cover" />
             </div>
-            <div className="p-4">
-              <h3 className="font-bold text-lg mb-1">{book.title}</h3>
+            <div className="p-4 min-h-[200px] flex flex-col justify-between">
+              <h3 className="font-bold text-lg mb-1 text-white">{book.title}</h3>
               <p className="text-gray-400 mb-2">{book.author}</p>
               <div className="flex flex-wrap gap-1 mb-4">
                 {book.genre.slice(0, 2).map((g, i) => (
-                  <span key={i} className="px-2 py-0.5 bg-[#252525] rounded-full text-xs">
+                  <span key={i} className="px-2 py-0.5 bg-[#252525] rounded-full text-xs text-gray-300">
                     {g}
                   </span>
                 ))}
                 {book.genre.length > 2 && (
-                  <span className="px-2 py-0.5 bg-[#252525] rounded-full text-xs">+{book.genre.length - 2}</span>
+                  <span className="px-2 py-0.5 bg-[#252525] rounded-full text-xs text-gray-300">+{book.genre.length - 2}</span>
                 )}
               </div>
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-2 gap-2 mt-auto pt-2">
                 <Link
                   href={`/view-detail?book_id=${book.book_id}`}
-                  className="flex items-center justify-center gap-1 bg-[#252525] hover:bg-[#333] text-white text-center font-medium py-2 rounded transition-colors duration-200"
+                  className="flex items-center justify-center gap-1 bg-[#1c2438]/50 hover:bg-[#1c2438] text-white text-center font-medium py-2 rounded-lg transition-all duration-300 border border-[#334155] hover:border-[#6d28d9]"
                 >
                   <Info className="h-4 w-4" />
                   Chi tiết
@@ -142,7 +142,7 @@ export default function AdminBooks() {
 
                 <button
                   onClick={() => handleDeleteBook(book.book_id)}
-                  className="flex items-center justify-center gap-1 bg-red-600 hover:bg-red-700 text-white text-center font-medium py-2 rounded transition-colors duration-200"
+                  className="flex items-center justify-center gap-1 bg-gradient-to-r from-red-600 to-red-800 text-white text-center font-medium py-2 rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-red-600/20 hover:scale-[1.02]"
                 >
                   <Trash2 className="h-4 w-4" />
                   Xóa

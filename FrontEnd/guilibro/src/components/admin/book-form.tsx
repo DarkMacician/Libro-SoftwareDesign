@@ -2,7 +2,7 @@
 
 import type React from "react"
 import { useState, useEffect } from "react"
-import { Upload } from "lucide-react"
+import { Upload, AlertCircle } from "lucide-react"
 import { getAllBooks, addBook } from "@/lib/api"
 import { useRouter } from "next/navigation"
 
@@ -16,6 +16,7 @@ export default function BookForm({ bookId }: BookFormProps) {
 
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [urlWarning, setUrlWarning] = useState<string | null>(null)
 
   const [formData, setFormData] = useState({
     title: "",
@@ -27,37 +28,30 @@ export default function BookForm({ bookId }: BookFormProps) {
   const [genreInput, setGenreInput] = useState("")
   const [coverImage, setCoverImage] = useState<File | null>(null)
 
-  // Fetch book data if in edit mode
-  useEffect(() => {
-    if (isEditMode) {
-      const fetchBook = async () => {
-        try {
-          const books = await getAllBooks()
-          const book = books.find((b) => b.book_id.toString() === bookId)
-
-          if (book) {
-            setFormData({
-              title: book.title,
-              author: book.author,
-              genre: book.genre,
-              url: book.url,
-            })
-          } else {
-            setError("Không tìm thấy sách")
-          }
-        } catch (err) {
-          setError("Không thể tải thông tin sách")
-          console.error(err)
-        }
-      }
-
-      fetchBook()
-    }
-  }, [bookId, isEditMode])
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
     setFormData((prev) => ({ ...prev, [name]: value }))
+
+    if (name === "url") {
+      validateUrl(value)
+    }
+  }
+
+  const validateUrl = (url: string) => {
+    setUrlWarning(null)
+
+    if (url.includes("drive.google.com")) {
+      if (!url.includes("/file/d/") && !url.includes("?id=")) {
+        setUrlWarning(
+          "URL Google Drive không hợp lệ. Vui lòng sử dụng URL có định dạng /file/d/{fileId}/view hoặc ?id={fileId}",
+        )
+      } else {
+        // Check if it's likely a JSON file
+        if (!url.includes(".json") && !url.toLowerCase().includes("json")) {
+          setUrlWarning("Lưu ý: URL nên trỏ đến file JSON chứa danh sách các URL hình ảnh")
+        }
+      }
+    }
   }
 
   const handleAddGenre = () => {
@@ -113,11 +107,11 @@ export default function BookForm({ bookId }: BookFormProps) {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      {error && <div className="bg-red-900/30 border border-red-800 text-red-300 p-4 rounded-md">{error}</div>}
+      {error && <div className="bg-[#1c2438]/30 border border-red-800 text-red-300 p-4 rounded-lg">{error}</div>}
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
-          <label htmlFor="title" className="block text-sm font-medium text-gray-300 mb-1">
+          <label htmlFor="title" className="block text-sm font-medium text-white mb-1">
             Tiêu đề sách
           </label>
           <input
@@ -126,13 +120,13 @@ export default function BookForm({ bookId }: BookFormProps) {
             name="title"
             value={formData.title}
             onChange={handleChange}
-            className="w-full px-3 py-2 bg-[#252525] border-none rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+            className="w-full px-3 py-2 bg-[#1c2438]/50 border border-[#334155] rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#6d28d9] focus:border-transparent"
             required
           />
         </div>
 
         <div>
-          <label htmlFor="author" className="block text-sm font-medium text-gray-300 mb-1">
+          <label htmlFor="author" className="block text-sm font-medium text-white mb-1">
             Tác giả
           </label>
           <input
@@ -141,14 +135,14 @@ export default function BookForm({ bookId }: BookFormProps) {
             name="author"
             value={formData.author}
             onChange={handleChange}
-            className="w-full px-3 py-2 bg-[#252525] border-none rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+            className="w-full px-3 py-2 bg-[#1c2438]/50 border border-[#334155] rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#6d28d9] focus:border-transparent"
             required
           />
         </div>
 
-        <div>
-          <label htmlFor="url" className="block text-sm font-medium text-gray-300 mb-1">
-            URL sách
+        <div className="md:col-span-2">
+          <label htmlFor="url" className="block text-sm font-medium text-white mb-1">
+            URL sách (JSON chứa danh sách hình ảnh)
           </label>
           <input
             type="url"
@@ -156,14 +150,21 @@ export default function BookForm({ bookId }: BookFormProps) {
             name="url"
             value={formData.url}
             onChange={handleChange}
-            className="w-full px-3 py-2 bg-[#252525] border-none rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-500"
-            placeholder="https://example.com/book.pdf"
+            className="w-full px-3 py-2 bg-[#1c2438]/50 border border-[#334155] rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#6d28d9] focus:border-transparent"
+            placeholder="https://drive.google.com/file/d/your-file-id/view"
             required
           />
+          {urlWarning && (
+            <div className="mt-2 flex items-start gap-2 text-[#f472b6] text-sm">
+              <AlertCircle size={16} className="mt-0.5 flex-shrink-0" />
+              <span>{urlWarning}</span>
+            </div>
+          )}
+          <p className="mt-1 text-sm text-gray-400">URL nên trỏ đến file JSON chứa mảng các URL hình ảnh</p>
         </div>
 
         <div>
-          <label htmlFor="genre" className="block text-sm font-medium text-gray-300 mb-1">
+          <label htmlFor="genre" className="block text-sm font-medium text-white mb-1">
             Thể loại
           </label>
           <div className="flex gap-2">
@@ -172,13 +173,13 @@ export default function BookForm({ bookId }: BookFormProps) {
               id="genre"
               value={genreInput}
               onChange={(e) => setGenreInput(e.target.value)}
-              className="flex-1 px-3 py-2 bg-[#252525] border-none rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+              className="flex-1 px-3 py-2 bg-[#1c2438]/50 border border-[#334155] rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#6d28d9] focus:border-transparent"
               placeholder="Thêm thể loại"
             />
             <button
               type="button"
               onClick={handleAddGenre}
-              className="px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-black font-medium rounded-md"
+              className="px-4 py-2 bg-gradient-to-r from-[#6d28d9] to-[#f472b6] text-white font-medium rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-[#6d28d9]/20 hover:scale-[1.02]"
             >
               Thêm
             </button>
@@ -186,7 +187,7 @@ export default function BookForm({ bookId }: BookFormProps) {
           {formData.genre.length > 0 && (
             <div className="mt-2 flex flex-wrap gap-2">
               {formData.genre.map((g, index) => (
-                <span key={index} className="px-2 py-1 bg-[#252525] rounded-full text-sm flex items-center gap-1">
+                <span key={index} className="px-3 py-1 bg-[#1c2438]/50 border border-[#334155] rounded-full text-sm flex items-center gap-1 text-white">
                   {g}
                   <button
                     type="button"
@@ -201,39 +202,21 @@ export default function BookForm({ bookId }: BookFormProps) {
           )}
         </div>
 
-        <div className="md:col-span-2">
-          <label className="block text-sm font-medium text-gray-300 mb-1">Ảnh bìa (Tùy chọn)</label>
-          <div className="flex items-center justify-center w-full">
-            <label
-              htmlFor="cover-image"
-              className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-600 rounded-lg cursor-pointer bg-[#252525] hover:bg-[#2a2a2a] transition-colors"
-            >
-              <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                <Upload className="w-8 h-8 text-gray-400 mb-2" />
-                <p className="text-sm text-gray-400">
-                  <span className="font-medium">Nhấp để tải lên</span> hoặc kéo và thả
-                </p>
-                <p className="text-xs text-gray-500">PNG, JPG hoặc WEBP (Tối đa 2MB)</p>
-              </div>
-              <input id="cover-image" type="file" accept="image/*" onChange={handleImageChange} className="hidden" />
-            </label>
-          </div>
-          {coverImage && <p className="mt-2 text-sm text-gray-400">Đã chọn: {coverImage.name}</p>}
-        </div>
+
       </div>
 
       <div className="flex justify-end gap-4">
         <button
           type="button"
           onClick={() => router.push("/admin")}
-          className="px-4 py-2 bg-[#252525] text-white rounded-md hover:bg-[#333333] transition-colors"
+          className="px-4 py-2 bg-[#1c2438]/50 hover:bg-[#1c2438] text-white text-center font-medium rounded-lg transition-all duration-300 border border-[#334155] hover:border-[#6d28d9]"
         >
           Hủy
         </button>
         <button
           type="submit"
           disabled={isLoading}
-          className="px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-black font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500 transition-colors disabled:opacity-50"
+          className="px-4 py-2 bg-gradient-to-r from-[#6d28d9] to-[#f472b6] text-white font-medium rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-[#6d28d9]/20 hover:scale-[1.02] disabled:opacity-50 disabled:hover:scale-100"
         >
           {isLoading ? "Đang lưu..." : isEditMode ? "Cập nhật sách" : "Thêm sách"}
         </button>
