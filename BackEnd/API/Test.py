@@ -1,178 +1,180 @@
+import pytest
 from fastapi.testclient import TestClient
-
+import jwt
 from BackEnd.API.api import app
+from BackEnd.utilities.config import SECRET_KEY
 
 client = TestClient(app)
 
-# Shared variables
-user = {
-    "username": "testuser",
-    "password": "testpass",
-    "email": "test@example.com",
-    "role": "user"
-}
+def create_token(username="testuser", role="user"):
+    return jwt.encode({"username": username, "role": role}, SECRET_KEY, algorithm="HS256")
 
-admin = {
-    "username": "adminuser",
-    "password": "adminpass",
-    "email": "admin@example.com",
-    "role": "admin"
-}
-
-tokens = {}
-
-# ---------- Signup ----------
-def test_signup_user():
-    res = client.post("/signup", json=user)
-    assert res.status_code in [200, 400]
-
-def test_signup_admin():
-    res = client.post("/signup", json=admin)
-    assert res.status_code in [200, 400]
-
-
-# ---------- Login ----------
-def test_login_user_success():
-    res = client.post("/login", json={
-        "username": user["username"], "password": user["password"]
+# -------------------------------
+# SIGN UP
+# -------------------------------
+def test_signup_success():
+    res = client.post("/signup", json={
+        "username": "user1211111111111111jhvytcaaaaaaaaaa",
+        "password": "pass123",
+        "email": "user1@exampleaaaaaaaaa.com",
+        "role": "user"
     })
     assert res.status_code == 200
-    tokens["user"] = res.json()["access_token"]
+    assert res.json()["message"] == "User registered successfully"
 
-def test_login_admin_success():
-    res = client.post("/login", json={
-        "username": admin["username"], "password": admin["password"]
+def test_signup_duplicate():
+    client.post("/signup", json={
+        "username": "userdup",
+        "password": "123",
+        "email": "userdup@example.com",
+        "role": "user"
     })
-    assert res.status_code == 200
-    tokens["admin"] = res.json()["access_token"]
-
-def test_login_fail():
-    res = client.post("/login", json={"username": "wrong", "password": "123"})
-    assert res.status_code == 401
-
-
-# ---------- Add Book ----------
-def test_add_book_as_admin_success():
-    res = client.post("/add_book", json={
-        "title": "PyTest Book",
-        "author": "Test Author",
-        "url": "http://example.com/book",
-        "genre": ["test"],
-        "token": tokens["admin"]
-    })
-    assert res.status_code in [200, 400]  # 400 nếu book đã tồn tại
-
-def test_add_book_duplicate():
-    res = client.post("/add_book", json={
-        "title": "PyTest Book",
-        "author": "Dup",
-        "url": "http://example.com/dup",
-        "genre": ["dup"],
-        "token": tokens["admin"]
+    res = client.post("/signup", json={
+        "username": "userdup",
+        "password": "123",
+        "email": "userdup@example.com",
+        "role": "user"
     })
     assert res.status_code == 400
+    assert res.json()["detail"] == "Username or Email already registered"
 
-def test_add_book_as_user_fail():
-    res = client.post("/add_book", json={
-        "title": "Hack Book",
-        "author": "Malicious",
-        "url": "http://bad.com",
-        "genre": ["hack"],
-        "token": tokens["user"]
+# -------------------------------
+# LOGIN
+# -------------------------------
+def test_login_success():
+    client.post("/signup", json={
+        "username": "logintest",
+        "password": "logintest",
+        "email": "logintest@example.com",
+        "role": "user"
     })
-    assert res.status_code == 403
-
-
-# ---------- Search Book ----------
-def test_search_book_success():
-    res = client.get("/search?title=PyTest Book")
-    assert res.status_code == 200
-    assert isinstance(res.json(), list)
-    global book_id
-    book_id = res.json()[0].get("id") or res.json()[0].get("book_id")
-
-def test_search_book_not_found():
-    res = client.get(f"/search?title=Unknown Book")
-    assert res.status_code == 404
-
-# ---------- View Detail (query param style) ----------
-def test_view_detail_success():
-    res = client.get(f"/view_detail?book_id=5")
-    assert res.status_code == 200
-    assert "title" in res.json()
-
-def test_view_detail_not_found():
-    res = client.get("/view_detail?book_id=9999")
-    assert res.status_code == 404
-    assert res.json()["detail"] == "Book not found"
-
-# ---------- Read Book ----------
-def test_read_book_success():
-    res = client.get("/read?book_id=5")
-    assert res.status_code == 200
-
-# ---------- Bookmark ----------
-def test_bookmark_as_user_success():
-    res = client.post("/bookmark", json={
-        "token": tokens["user"],
-        "book_id": 5,
-        "page": 10
+    res = client.post("/login", json={
+        "username": "logintest",
+        "password": "logintest"
     })
     assert res.status_code == 200
+    assert "access_token" in res.json()
 
-def test_bookmark_as_admin_fail():
-    res = client.post("/bookmark", json={
-        "token": tokens["admin"],
-        "book_id": 5,
-        "page": 20
-    })
-    assert res.status_code == 403
-
-def test_bookmark_invalid_token():
-    res = client.post("/bookmark", json={
-        "token": "invalid.token.here",
-        "book_id": 5,
-        "page": 1
+def test_login_fail():
+    res = client.post("/login", json={
+        "username": "nouser",
+        "password": "wrong"
     })
     assert res.status_code == 401
+    assert res.json()["detail"] == "Invalid username or password"
 
+# -------------------------------
+# ADD BOOK (Admin only)
+# -------------------------------
+def test_add_book_success_as_admin():
+    token = create_token("admin1", "admin")
+    res = client.post("/admin/add_book",
+        headers={"token": token},
+        json={
+            "title": "Book16789aaaaaaaaa",
+            "author": "Author1",
+            "url": "http://example.com/book.pdf",
+            "genre": ["Fiction"]
+        })
+    assert res.status_code == 200
 
-# ---------- Delete Book ----------
-def test_delete_book_as_user_fail():
-    res = client.request("DELETE", "/delete_book", json={
-        "token": tokens["user"],
-        "book_id": 5
-    })
+def test_add_book_as_user_forbidden():
+    token = create_token("user1", "user")
+    res = client.post("/admin/add_book",
+        headers={"token": token},
+        json={
+            "title": "Should Fail",
+            "author": "User",
+            "url": "http://example.com",
+            "genre": ["Drama"]
+        })
     assert res.status_code == 403
 
-def test_delete_book_success():
-    res = client.request("DELETE", "/delete_book", json={
-        "token": tokens["admin"],
-        "book_id": 5
-    })
-    assert res.status_code == 200 or res.status_code == 404
+def test_add_existing_book():
+    token = create_token("admin2", "admin")
+    data = {
+        "title": "Existing Book",
+        "author": "Author",
+        "url": "http://example.com/exist.pdf",
+        "genre": ["Sci-Fi"]
+    }
+    client.post("/admin/add_book", json=data, headers={"token": token})
+    res = client.post("/admin/add_book", json=data, headers={"token": token})
+    assert res.status_code == 400
 
+# -------------------------------
+# READ BOOK
+# -------------------------------
+def test_read_book_success():
+    token = create_token("admin3", "admin")
+    client.post("/admin/add_book", json={
+        "title": "Read Test",
+        "author": "Read Auth",
+        "url": "http://example.com/read.pdf",
+        "genre": ["Mystery"]
+    }, headers={"token": token})
+    books = client.get("/search", params={"title": "Read Test"}).json()
+    book_id = books[0]['book_id']
+    res = client.get("/read", params={"book_id": book_id})
+    assert res.status_code == 200
+
+# -------------------------------
+# DELETE BOOK (Admin only)
+# -------------------------------
 def test_delete_book_not_found():
-    res = client.request("DELETE", "/delete_book", json={
-        "token": tokens["admin"],
-        "book_id": 99999
-    })
+    token = create_token("admin", "admin")
+    res = client.delete("/admin/delete_book", params={"book_id": 999999}, headers={"token": token})
     assert res.status_code == 404
 
+def test_delete_book_permission_denied():
+    token = create_token("user1", "user")
+    res = client.delete("/admin/delete_book", params={"book_id": 1}, headers={"token": token})
+    assert res.status_code == 403
 
-# ---------- Edge cases ----------
-def test_add_book_missing_token():
-    res = client.post("/add_book", json={
-        "title": "NoToken",
-        "author": "None",
-        "url": "http://none.com",
-        "genre": ["missing"]
-    })
-    assert res.status_code == 422  # Missing field
+# -------------------------------
+# BOOKMARK (User only)
+# -------------------------------
+def test_bookmark_success():
+    token = create_token("userbm", "user")
+    # You must ensure a book exists beforehand
+    book = {
+        "title": "BM Book",
+        "author": "BMark",
+        "url": "http://example.com/bm.pdf",
+        "genre": ["Genre"]
+    }
+    admin_token = create_token("adminbm", "admin")
+    client.post("/admin/add_book", json=book, headers={"token": admin_token})
+    books = client.get("/search", params={"title": "BM Book"}).json()
+    book_id = books[0]['book_id']
+    res = client.post("/bookmark", headers={"token": token}, json={"book_id": book_id, "page": 5})
+    assert res.status_code == 200
 
-def test_bookmark_missing_page():
-    res = client.post("/bookmark", json={
-        "token": tokens["user"],
-        "book_id": book_id
-    })
-    assert res.status_code == 422
+def test_bookmark_forbidden():
+    token = create_token("admin", "admin")
+    res = client.post("/bookmark", headers={"token": token}, json={"book_id": 1, "page": 1})
+    assert res.status_code == 403
+
+# -------------------------------
+# GET BOOKMARK
+# -------------------------------
+def test_get_bookmark_success():
+    token = create_token("userbm2", "user")
+    admin_token = create_token("adminbm2", "admin")
+    client.post("/admin/add_book", json={
+        "title": "BM2 Book",
+        "author": "BMark",
+        "url": "http://example.com/bm2.pdf",
+        "genre": ["Genre"]
+    }, headers={"token": admin_token})
+    books = client.get("/search", params={"title": "BM2 Book"}).json()
+    book_id = books[0]['book_id']
+    client.post("/bookmark", headers={"token": token}, json={"book_id": book_id, "page": 9})
+    res = client.get("/bookmark", headers={"token": token}, params={"book_id": book_id})
+    assert res.status_code == 200
+    assert res.json()["page"] == 9
+
+def test_get_bookmark_not_found():
+    token = create_token("userbm3", "user")
+    res = client.get("/bookmark", headers={"token": token}, params={"book_id": 99999})
+    assert res.status_code == 404

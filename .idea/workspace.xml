@@ -6,13 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="91a7fa55-4168-4d45-8505-03e9bdef58c0" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackEnd/API/api.py" beforeDir="false" afterPath="$PROJECT_DIR$/BackEnd/API/api.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackEnd/DAO/Book/dao.py" beforeDir="false" afterPath="$PROJECT_DIR$/BackEnd/DAO/Book/dao.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackEnd/DAO/ManageDAO.py" beforeDir="false" afterPath="$PROJECT_DIR$/BackEnd/DAO/ManageDAO.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackEnd/DAO/Mark/dao.py" beforeDir="false" afterPath="$PROJECT_DIR$/BackEnd/DAO/Mark/dao.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackEnd/DAO/Person/dao.py" beforeDir="false" afterPath="$PROJECT_DIR$/BackEnd/DAO/Person/dao.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackEnd/DAO/Read/dao.py" beforeDir="false" afterPath="$PROJECT_DIR$/BackEnd/DAO/Read/dao.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackEnd/DAO/temp.py" beforeDir="false" afterPath="$PROJECT_DIR$/BackEnd/DAO/temp.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BackEnd/API/Test.py" beforeDir="false" afterPath="$PROJECT_DIR$/BackEnd/API/Test.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -49,22 +43,23 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Python tests.Python tests in Test.py.executor&quot;: &quot;Run&quot;,
-    &quot;Python.Book.executor&quot;: &quot;Run&quot;,
-    &quot;Python.api.executor&quot;: &quot;Run&quot;,
-    &quot;Python.dao.executor&quot;: &quot;Run&quot;,
-    &quot;Python.pdf2img.executor&quot;: &quot;Run&quot;,
-    &quot;Python.temp.executor&quot;: &quot;Run&quot;,
-    &quot;Python.test.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/Libro-SoftwareDesign&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Python tests.Python tests in Test.py.executor": "Run",
+    "Python tests.Python tests in api.py.executor": "Run",
+    "Python.Book.executor": "Run",
+    "Python.api.executor": "Run",
+    "Python.dao.executor": "Run",
+    "Python.pdf2img.executor": "Run",
+    "Python.temp.executor": "Run",
+    "Python.test.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "D:/Libro-SoftwareDesign",
+    "settings.editor.selected.configurable": "preferences.lookFeel"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="D:\Libro-SoftwareDesign\BackEnd\DAO" />
