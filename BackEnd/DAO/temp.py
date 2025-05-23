@@ -3,7 +3,7 @@ import os
 from dotenv import load_dotenv, dotenv_values
 
 from BackEnd.utilities.config import MongoDB
-load_dotenv(dotenv_path="D:\Libro-SoftwareDesign\BackEnd\DAO\.env")
+load_dotenv(dotenv_path="BackEnd/DAO\.env")
 
 connection_string = MongoDB.CONNECTION_STRING
 

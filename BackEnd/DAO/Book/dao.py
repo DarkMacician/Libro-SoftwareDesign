@@ -7,7 +7,7 @@ class BookDAO:
         db = MongoConnection.get_db_instance()
         self.collection = db[collection_name]
 
-    def post(self, data: Dict):
+    def create(self, data: Dict):
         last_book = self.collection.find_one({}, sort=[("book_id", DESCENDING)])
         new_book_id = (last_book["book_id"] + 1) if last_book else 1
         data["book_id"] = new_book_id

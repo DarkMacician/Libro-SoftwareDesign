@@ -32,7 +32,7 @@ class DAOManager:
         return self.person_dao.check_by_username(query['username']) or self.person_dao.check_by_email(query['email'])
 
     def add_person(self, data):
-        self.person_dao.add(data)
+        self.person_dao.create(data)
 
     def authenticate_user(self, data):
         user = self.person_dao.get(data)
@@ -48,7 +48,7 @@ class DAOManager:
         return self.book_dao.get({"book_id": int(id)})
 
     def add_book(self, data: Dict) -> None:
-        self.book_dao.post(data)
+        self.book_dao.create(data)
 
     def delete_book(self, book_id: int):
         self.book_dao.delete(book_id)
@@ -75,7 +75,7 @@ class DAOManager:
         return self.book_dao.find(id)
 
     def create_bookmark(self, data):
-        self.mark_dao.post(data)
+        self.mark_dao.create(data)
 
     def get_all_books(self):
         return self.book_dao.get_all()

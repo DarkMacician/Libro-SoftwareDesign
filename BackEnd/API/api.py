@@ -1,5 +1,5 @@
 from typing import List
-from fastapi import FastAPI, HTTPException, Query
+from fastapi import FastAPI, HTTPException, Query, Header
 import jwt
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
@@ -40,17 +40,14 @@ class AddBook(BaseModel):
     author: str
     url: str
     genre: List[str]
-    token: str
 
 class ReadBook(BaseModel):
     book_id: int
 
 class DeleteBook(BaseModel):
-    token: str
     book_id: int
 
 class BookMark(BaseModel):
-    token: str
     book_id: int
     page: int
 
@@ -58,7 +55,6 @@ class SearchBook(BaseModel):
     title: str
 
 class ExtractBookmark(BaseModel):
-    token: str
     book_id: int
 
 # FastAPI App
@@ -67,7 +63,7 @@ library_manager = DAOManager()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Hoặc chỉ định cụ thể như ["http://localhost:3000"]
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -102,36 +98,27 @@ def read(book_id: int = Query(..., description="Book ID to view detail")):
     return library_manager.get_book(book_id)['url']
 
 @app.post("/admin/add_book")
-def add_book(book: AddBook):
-    book = {
-        'title': book.title,
-        'author': book.author,
-        'genre': book.genre,
-        'url': book.url,
-        'token': book.token
-    }
-    if library_manager.search_book(book['title']):
+def add_book(book: AddBook, token: str = Header(...)):
+    if library_manager.search_book(book.title):
         raise HTTPException(status_code=400, detail="Book already exists")
-    if get_role(book['token']) == 'admin':
-        book.pop('token', None)
-        library_manager.add_book(book)
+    if get_role(token) == 'admin':
+        book_data = {
+            'title': book.title,
+            'author': book.author,
+            'genre': book.genre,
+            'url': book.url
+        }
+        library_manager.add_book(book_data)
         return {"message": "Book added successfully"}
     else:
         raise HTTPException(status_code=403, detail="Permission denied: Admin role required")
 
 @app.delete("/admin/delete_book")
-def delete_book(book: DeleteBook):
-    book = {
-        'book_id': book.book_id,
-        'token': book.token
-    }
-
-    if not library_manager.find_book(book['book_id']):
+def delete_book(book_id: int = Query(...), token: str = Header(...)):
+    if not library_manager.find_book(book_id):
         raise HTTPException(status_code=404, detail="Book not found")
-
-    if get_role(book['token']) == 'admin':
-        book.pop('token', None)
-        library_manager.delete_book(book['book_id'])
+    if get_role(token) == 'admin':
+        library_manager.delete_book(book_id)
         return {"message": "Book deleted successfully"}
     else:
         raise HTTPException(status_code=403, detail="Permission denied: Admin role required")
@@ -153,19 +140,18 @@ def search(title: str = Query(..., description="Book title to search")):
     return books
 
 @app.post("/bookmark")
-def bookmark(mark: BookMark):
-    mark = {
-        "token": mark.token,
-        "book_id": mark.book_id,
-        "page": mark.page
-    }
-    if get_role(mark['token']) == 'user':
-        mark['username'] = get_username(mark['token'])
-        mark.pop('token', None)
-        if library_manager.getMark({'username': mark['username'], 'book_id': mark['book_id']}):
-            library_manager.updateMark(mark)
+def bookmark(mark: BookMark, token: str = Header(...)):
+    if get_role(token) == 'user':
+        username = get_username(token)
+        data = {
+            "username": username,
+            "book_id": mark.book_id,
+            "page": mark.page
+        }
+        if library_manager.getMark({'username': username, 'book_id': mark.book_id}):
+            library_manager.updateMark(data)
         else:
-            library_manager.create_bookmark(mark)
+            library_manager.create_bookmark(data)
         return {"message": "Book bookmarked successfully"}
     else:
         raise HTTPException(status_code=403, detail="Permission denied: User role required")
@@ -179,23 +165,13 @@ def get_all_book():
 
 @app.get("/bookmark")
 def get_bookmark(
-    token: str = Query(..., description="User token"),
+    token: str = Header(...),
     book_id: int = Query(..., description="Book ID")
 ):
     if get_role(token) != 'user':
         raise HTTPException(status_code=403, detail="Permission denied: User role required")
-
     username = get_username(token)
-    info = {
-        "book_id": book_id,
-        "username": username
-    }
-
-    result = library_manager.getMark(info)
+    result = library_manager.getMark({"book_id": book_id, "username": username})
     if not result:
         raise HTTPException(status_code=404, detail="No Bookmarks found")
-
-    return {
-        "status": "success",
-        "page": result['page']
-    }
+    return {"status": "success", "page": result['page']}

@@ -7,7 +7,7 @@ class MarkDAO:
         db = MongoConnection().get_db_instance()
         self.collection = db[collection_name]
 
-    def post(self, data: Dict):
+    def create(self, data: Dict):
         self.collection.insert_one(data)
 
     def get(self, query: Dict):
